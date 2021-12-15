@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="title">
+        Youth Study Subscription System
+    </h1>
+    {% if session['user_id'] %}
+        <h2 class="subtitle">
+            Hi {{ session['user_nickname'] }}! You have signed in.
+        </h2>
+
+    {% else %}
+        <h2 class="subtitle">
+            Good good study, day day up!
+        </h2>
+    {% endif %}
+{% endblock %}

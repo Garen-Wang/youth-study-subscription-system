@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="title">
+        My Profile
+    </h1>
+
+    <div class="breadcrumb">
+        <ul>
+            <li>{{ session['user_id'] }}</li>
+{#            <li>{{ session['user_role_id'] }}</li>#}
+{#            <li>{{ session['user_youth_league_branch_id'] }}</li>#}
+            <li>{{ session['user_real_name'] }}</li>
+            <li>{{ session['user_nickname'] }}</li>
+            <li>{{ session['user_phone_number'] }}</li>
+        </ul>
+    </div>
+
+{% endblock %}
