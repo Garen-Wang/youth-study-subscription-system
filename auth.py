@@ -9,14 +9,14 @@ import ver
 from models import User, SystemAdmin, YouthLeagueBranch
 from app import db
 
-auth = Blueprint('auth', __name__)
+auth_bp = Blueprint('auth', __name__)
 
 
 def not_logged_in_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if 'user_id' in session.keys() or 'branch_id' in session.keys() or 'admin_id' in session.keys():
-            return redirect(url_for('main.index'))
+            return redirect(url_for('index.index'))
         return view(**kwargs)
     return wrapped_view
 
@@ -50,7 +50,7 @@ def admin_required(view):
     return wrapped_view
 
 
-@auth.route('/admin/login', methods=['GET', 'POST'])
+@auth_bp.route('/admin/login', methods=['GET', 'POST'])
 @not_logged_in_required
 def admin_login():
     if request.method == 'GET':
@@ -84,13 +84,13 @@ def admin_login():
             session['admin_real_name'] = admin.real_name
             session['admin_phone_number'] = admin.phone_number
             session['role_id'] = admin.role_id
-            return redirect(url_for('main.index'))
+            return redirect(url_for('index.index'))
         else:
             flash('incorrect password')
             return render_template('login.html')
 
 
-@auth.route('/branch/login', methods=['GET', 'POST'])
+@auth_bp.route('/branch/login', methods=['GET', 'POST'])
 @not_logged_in_required
 def branch_login():
     if request.method == 'GET':
@@ -125,13 +125,13 @@ def branch_login():
             session['branch_phone_number'] = branch.phone_number
             session['role_id'] = branch.role_id
             session['admin_id'] = branch.admin_id
-            return redirect(url_for('main.index'))
+            return redirect(url_for('index.index'))
         else:
             flash('incorrect password')
             return render_template('auth/branch_login.html')
 
 
-@auth.route('/user/login', methods=['GET', 'POST'])
+@auth_bp.route('/user/login', methods=['GET', 'POST'])
 @not_logged_in_required
 def login():
     if request.method == 'GET':
@@ -170,13 +170,13 @@ def login():
             session['user_finished'] = user.finished
             session['role_id'] = user.role_id
             session['branch_id'] = user.youth_league_branch_id
-            return redirect(url_for('main.index'))
+            return redirect(url_for('index.index'))
         else:
             flash('incorrect password')
             return render_template('login.html')
 
 
-@auth.route('/admin/register', methods=['GET', 'POST'])
+@auth_bp.route('/admin/register', methods=['GET', 'POST'])
 @not_logged_in_required
 def admin_register():
     if request.method == 'GET':
@@ -247,7 +247,7 @@ def admin_register():
                                    info='The action name is neither Send nor Register.')
 
 
-@auth.route('/branch/register', methods=['GET', 'POST'])
+@auth_bp.route('/branch/register', methods=['GET', 'POST'])
 @admin_required
 def branch_register():
     if request.method == 'GET':
@@ -319,7 +319,7 @@ def branch_register():
                                    info='The action name is neither Send nor Register.')
 
 
-@auth.route('/user/register', methods=['GET', 'POST'])
+@auth_bp.route('/user/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
         if not user_registration_closed:
@@ -402,8 +402,8 @@ def register():
                                    info='The action name is neither Send nor Register.')
 
 
-@auth.route('/logout')
+@auth_bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('main.index'))
+    return redirect(url_for('index.index'))
 

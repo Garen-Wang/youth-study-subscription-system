@@ -18,7 +18,7 @@
                 <div class="container">
                     <div id="navbarMenuHeroA" class="navbar-menu">
                         <div class="navbar-end">
-                            <a href="{{ url_for('main.index') }}" class="navbar-item">首页</a>
+                            <a href="{{ url_for('index.index') }}" class="navbar-item">首页</a>
                             {% if session['user_id'] %}
                                 <a href="{{ url_for('user.subscriptions') }}" class="navbar-item">订阅管理</a>
                                 {% if not session['user_finished'] %}

@@ -9,26 +9,26 @@ import data_updater
 from models import YouthLeagueBranch, User, YouthStudyEpisode, Subscription, day_of_week_dict
 from auth import branch_required
 
-branch = Blueprint('branch', __name__)
+branch_bp = Blueprint('branch', __name__)
 
 
 def get_league_members():
     return data_updater.get_member_list('secret/youth_league_member_list.xls')
 
 
-@branch.before_request
+@branch_bp.before_request
 def load_branch():
     if session['branch_id']:
         branch = YouthLeagueBranch.query.filter_by(id=session['branch_id']).first()
         g.branch = branch
 
 
-@branch.route('/branch/members')
+@branch_bp.route('/branch/members')
 @branch_required
 def members():
     g.finished_dict = {True: '是', False: '否'}
     # df = pd.DataFrame(columns=['id', 'real_name', 'finished'])
-    assert branch
+    assert branch_bp
     # for user in branch.users:
     #     print(user)
         # df = df.append({'id': user.id, 'real_name': user.real_name, 'finished': user.finished}, ignore_index=True)
@@ -36,7 +36,7 @@ def members():
 
 
 # update youth study status
-@branch.route('/branch/update')
+@branch_bp.route('/branch/update')
 @branch_required
 def update():
     _update(session['branch_id'])
@@ -57,7 +57,7 @@ def _update(branch_id):
     db.session.commit()
 
 
-@branch.route('/branch/notify')
+@branch_bp.route('/branch/notify')
 @branch_required
 def notify():
     _notify(session['branch_id'])
@@ -71,14 +71,14 @@ def _notify(branch_id):
         mail.send_reminder(user.email_address, user.nickname, 12, 11)
 
 
-@branch.route('/branch/subscriptions')
+@branch_bp.route('/branch/subscriptions')
 @branch_required
 def subscriptions():
     g.day_of_week_dict = day_of_week_dict
     return render_template('subscriptions.html', subscriptions=get_subscriptions(), branch=YouthLeagueBranch.query.filter_by(id=session['branch_id']).first())
 
 
-@branch.route('/branch/subscribe', methods=['GET', 'POST'])
+@branch_bp.route('/branch/subscribe', methods=['GET', 'POST'])
 @branch_required
 def subscribe():
     g.day_of_week_dict = day_of_week_dict
@@ -91,7 +91,7 @@ def subscribe():
         return render_template('subscriptions.html', subscriptions=get_subscriptions())
 
 
-@branch.route('/branch/unsubscribe', methods=['GET', 'POST'])
+@branch_bp.route('/branch/unsubscribe', methods=['GET', 'POST'])
 @branch_required
 def unsubscribe():
     g.day_of_week_dict = day_of_week_dict
@@ -104,7 +104,7 @@ def unsubscribe():
         return render_template('subscriptions.html', subscriptions=get_subscriptions())
 
 
-@branch.route('/branch/user_register', methods=['GET', 'POST'])
+@branch_bp.route('/branch/user_register', methods=['GET', 'POST'])
 @branch_required
 def user_register():
     if request.method == 'GET':

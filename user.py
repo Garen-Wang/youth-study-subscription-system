@@ -4,23 +4,23 @@ from app import db
 from auth import user_required
 from models import Subscription, User, YouthLeagueBranch, day_of_week_dict
 
-user = Blueprint('user', __name__)
+user_bp = Blueprint('user', __name__)
 
 
-@user.before_request
+@user_bp.before_request
 def load_user():
     if session['user_id']:
         user = User.query.filter_by(id=session['user_id']).first()
         g.user = user
 
 
-@user.route('/user/update')
+@user_bp.route('/user/update')
 @user_required
 def update():
     user = User.query.filter_by(id=session['user_id']).first()
     if user.finished is True:
         session['user_finished'] = True
-        return redirect(url_for('main.index'))
+        return redirect(url_for('index.index'))
 
     branch = YouthLeagueBranch.query.filter_by(id=session['branch_id']).first()
     studied_list, unstudied_list = branch.update()
@@ -28,17 +28,17 @@ def update():
         user.finished = True
         branch.num_finished += 1
         session['user_finished'] = True
-    return redirect(url_for('main.index'))
+    return redirect(url_for('index.index'))
 
 
-@user.route('/user/subscriptions')
+@user_bp.route('/user/subscriptions')
 @user_required
 def subscriptions():
     g.day_of_week_dict = models.display_day_of_week_dict
     return render_template('subscriptions.html', subscriptions=get_subscriptions())
 
 
-@user.route('/user/subscribe', methods=['GET', 'POST'])
+@user_bp.route('/user/subscribe', methods=['GET', 'POST'])
 @user_required
 def subscribe():
     g.day_of_week_dict = day_of_week_dict
@@ -51,7 +51,7 @@ def subscribe():
         return render_template('subscriptions.html', subscriptions=get_subscriptions())
 
 
-@user.route('/user/unsubscribe', methods=['GET', 'POST'])
+@user_bp.route('/user/unsubscribe', methods=['GET', 'POST'])
 @user_required
 def unsubscribe():
     g.day_of_week_dict = day_of_week_dict

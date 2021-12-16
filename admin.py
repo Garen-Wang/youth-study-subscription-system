@@ -9,16 +9,16 @@ from app import db, scheduler
 from branch import _update, _notify
 import exceptions
 
-admin = Blueprint('admin', __name__)
+admin_bp = Blueprint('admin', __name__)
 
 
-@admin.route('/admin/members')
+@admin_bp.route('/admin/members')
 @admin_required
 def members():
     return render_template('admin/members.html', branches=get_branches())
 
 
-@admin.route('/admin/update')
+@admin_bp.route('/admin/update')
 @admin_required
 def update():
     branches = get_branches()
@@ -27,7 +27,7 @@ def update():
     return redirect(url_for('admin.members'))
 
 
-@admin.route('/admin/notify')
+@admin_bp.route('/admin/notify')
 @admin_required
 def notify():
     branches = get_branches()
@@ -36,14 +36,14 @@ def notify():
     return redirect(url_for('admin.members'))
 
 
-@admin.route('/admin/subscriptions')
+@admin_bp.route('/admin/subscriptions')
 @admin_required
 def subscriptions():
     g.day_of_week_dict = models.display_day_of_week_dict
     return render_template('subscriptions.html', subscriptions=get_subscriptions())
 
 
-@admin.route('/admin/subscriptions/add', methods=['GET', 'POST'])
+@admin_bp.route('/admin/subscriptions/add', methods=['GET', 'POST'])
 @admin_required
 def add_subscription():
     if request.method == 'GET':
@@ -58,7 +58,7 @@ def add_subscription():
         return redirect(url_for('admin.subscriptions'))
 
 
-@admin.route('/admin/subscriptions/delete', methods=['GET', 'POST'])
+@admin_bp.route('/admin/subscriptions/delete', methods=['GET', 'POST'])
 @admin_required
 def delete_subscription():
     g.day_of_week_dict = models.display_day_of_week_dict
@@ -71,7 +71,7 @@ def delete_subscription():
         return render_template('subscriptions.html', subscriptions=get_subscriptions())
 
 
-@admin.route('/admin/subscriptions/enable', methods=['GET', 'POST'])
+@admin_bp.route('/admin/subscriptions/enable', methods=['GET', 'POST'])
 @admin_required
 def enable_subscription():
     g.day_of_week_dict = models.display_day_of_week_dict
@@ -84,7 +84,7 @@ def enable_subscription():
         return render_template('subscriptions.html', subscriptions=get_subscriptions())
 
 
-@admin.route('/admin/subscriptions/disable', methods=['GET', 'POST'])
+@admin_bp.route('/admin/subscriptions/disable', methods=['GET', 'POST'])
 @admin_required
 def disable_subscription():
     g.day_of_week_dict = models.display_day_of_week_dict
