@@ -2,7 +2,7 @@ import atexit
 import json
 import datetime
 
-from flask import Flask, session, Response
+from flask import Flask, session, Response, g
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_apscheduler import APScheduler
 from flask_sqlalchemy import SQLAlchemy
@@ -107,7 +107,6 @@ from flask_sqlalchemy import SQLAlchemy
 #     app = create_app()
 #     app.run()
 #     app.app_context().push()
-
 
 atexit.register(lambda: scheduler.shutdown())
 

@@ -26,6 +26,7 @@
                             {% elif session['branch_id'] %}
                                 <a href="{{ url_for('branch.members') }}" class="navbar-item">Members</a>
 {#                                <a href="{{ url_for('branch.statistics') }}" class="navbar-item">Statistics</a>#}
+                                <a href="{{ url_for('branch.user_register') }}" class="navbar-item">Register</a>
                                 <a href="{{ url_for('branch.subscriptions') }}" class="navbar-item">Subscriptions</a>
                                 <a href="{{ url_for('auth.logout') }}" class="navbar-item">Logout</a>
                             {% elif session['admin_id'] %}

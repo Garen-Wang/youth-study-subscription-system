@@ -139,6 +139,7 @@ class Subscription(db.Model):
 
 
 day_of_week_dict = {
+    # used for cron trigger
     'sun': 0,
     'mon': 1,
     'tue': 2,
@@ -146,11 +147,12 @@ day_of_week_dict = {
     'thu': 4,
     'fri': 5,
     'sat': 6,
-    0: 'sun',
-    1: 'mon',
-    2: 'tue',
-    3: 'wed',
-    4: 'thu',
-    5: 'fri',
-    6: 'sat',
+    # used for display
+    0: 'Sunday',
+    1: 'Monday',
+    2: 'Tuesday',
+    3: 'Wednesday',
+    4: 'Thursday',
+    5: 'Friday',
+    6: 'Saturday',
 }

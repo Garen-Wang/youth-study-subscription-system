@@ -14,10 +14,14 @@
                     <th>Time</th>
                 </tr>
                 {% for subscription in subscriptions %}
-                    <tr>
+                    {% if g.user in subscription.users or g.branch in subscription.branches %}
+                        <tr class="is-selected">
+                    {% else %}
+                        <tr>
+                    {% endif %}
                     <td>{{ subscription.name }}</td>
                     <td>{{ 'subscription%d' % (subscription.id) }}</td>
-                    <td>{{ subscription.day_of_week }}</td>
+                    <td>{{ g.day_of_week_dict[subscription.day_of_week] }}</td>
                     <td>{{ '%02d:%02d' % (subscription.hour, subscription.minute) }}</td>
                     </tr>
                 {% endfor %}

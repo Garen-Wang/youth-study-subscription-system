@@ -64,6 +64,7 @@ def send_reminder(email_address, name, season, episode):
     Good good study, day day up!
     (This is an automatic reply, indicating that you still did not finish youth study at the last update.)
     '''.format(name, season, episode)
-    send(title, content, email_address)
+    # TODO: testing here, remember to uncomment
+    # send(title, content, email_address)
 
 # test()

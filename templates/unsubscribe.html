@@ -15,13 +15,13 @@
             <form method="post">
             <div class="field">
                 {% for subscription in subscriptions %}
-                    {% if user and subscription.enabled and user in subscription.users %}
+                    {% if g.user and subscription.enabled and g.user in subscription.users %}
                         <div class="control">
                             <input type="checkbox" id="subscription{{ subscription.id }}" name="subscription{{ subscription.id }}">
                             <label for="subscription{{ subscription.id }}">{{ 'subscription%d -- %d. %02d:%02d' % (subscription.id, subscription.day_of_week, subscription.hour, subscription.minute) }}</label>
                         </div>
                     {% endif %}
-                    {% if branch and subscription.enabled and branch in subscription.branches %}
+                    {% if g.branch and subscription.enabled and g.branch in subscription.branches %}
                         <div class="control">
                             <input type="checkbox" id="subscription{{ subscription.id }}" name="subscription{{ subscription.id }}">
                             <label for="subscription{{ subscription.id }}">{{ 'subscription%d -- %d. %02d:%02d' % (subscription.id, subscription.day_of_week, subscription.hour, subscription.minute) }}</label>
