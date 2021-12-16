@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="column is-fullscreen">
+        <h1 class="title">Subscriptions</h1>
+        <div class="box">
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead></thead>
+                <tbody>
+                <tr>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Day of Week</th>
+                    <th>Time</th>
+                </tr>
+                {% for subscription in subscriptions %}
+                    <tr>
+                    <td>{{ subscription.name }}</td>
+                    <td>{{ 'subscription%d' % (subscription.id) }}</td>
+                    <td>{{ subscription.day_of_week }}</td>
+                    <td>{{ '%02d:%02d' % (subscription.hour, subscription.minute) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+            <div class="columns">
+                {% if session['user_id'] %}
+                    <div class="column">
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('user.subscribe') }}">Subscribe</a>
+                    </div>
+                    <div class="column">
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('user.unsubscribe') }}">Unsubscribe</a>
+                    </div>
+                {% elif session['branch_id'] %}
+                    <div class="column">
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('branch.subscribe') }}">Subscribe</a>
+                    </div>
+                    <div class="column">
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('branch.unsubscribe') }}">Unsubscribe</a>
+                    </div>
+                {% elif session['admin_id'] %}
+                    <div class="column">
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.add_subscription') }}">Add Subscription</a>
+                    </div>
+                    <div class="column">
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.delete_subscription') }}">Delete Subscription</a>
+                    </div>
+                    <div class="column">
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.enable_subscription') }}">Enable Subscription</a>
+                    </div>
+                    <div class="column">
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.disable_subscription') }}">Disable Subscription</a>
+                    </div>
+                {% endif %}
+            </div>
+    </div>
+{% endblock %}

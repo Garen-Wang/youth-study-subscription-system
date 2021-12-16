@@ -7,8 +7,29 @@
     {% if session['user_id'] %}
         <h2 class="subtitle">
             Hi {{ session['user_nickname'] }}! You have signed in.
+            Your role id is {{ session['role_id'] }}.
+        </h2>
+        <h2 class="subtitle">
+            {% if session['user_finished'] %}
+                Nice! You have finished the study in this week.
+            {% else %}
+                Do not forget to get youth study done when you are available~
+            {% endif %}
         </h2>
 
+        <div class="column">
+            <a class="button is-block" href="{{ url_for('user.update') }}">Update</a>
+        </div>
+    {% elif session['branch_id'] %}
+        <h2 class="subtitle">
+            Hi {{ session['branch_real_name'] }}! You have signed in.
+            Your role id is {{ session['role_id'] }}
+        </h2>
+    {% elif session['admin_id'] %}
+        <h2 class="subtitle">
+            Hi {{ session['admin_real_name'] }}! You have signed in.
+            Your role id is {{ session['role_id'] }}
+        </h2>
     {% else %}
         <h2 class="subtitle">
             Good good study, day day up!

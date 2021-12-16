@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="title">
+    Youth Study Status
+    </h1>
+
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>Youth Study Status of League Branches</thead>
+        <tbody>
+        <tr>
+            {% for col in ['branch name', 'total number', 'studied number', 'studied rate'] %}
+                <th>{{ col }}</th>
+            {% endfor %}
+        </tr>
+        {% for branch in branches %}
+            {% set dev = namespace(value=0) %}
+            {% for user in branch.users %}
+                {% set dev.value = dev.value + 1 %}
+            {% endfor %}
+            <tr>
+                <td><a href="#">{{ branch.real_name }}</a></td>
+                <td>{{ dev.value }}</td>
+                <td>{{ branch.num_finished }}</td>
+                <td>
+                    {% if dev.value != 0 %}
+                        {{ "{}%".format(branch.num_finished / dev.value * 100) }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="columns">
+        <div class="column">
+            <a href="{{ url_for('admin.update') }}" class="button is-rounded is-info is-large column">Update</a>
+        </div>
+        <div class="column">
+            <a href="{{ url_for('admin.notify') }}" class="button is-rounded is-info is-large column">Notify</a>
+        </div>
+    </div>
+
+{% endblock %}

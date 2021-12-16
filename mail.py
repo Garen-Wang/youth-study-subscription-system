@@ -57,4 +57,13 @@ def send_verification_code(email_address):
     print(content)
 
 
+def send_reminder(email_address, name, season, episode):
+    title = "Don't forget to get youth study done!"
+    content = '''Dear {}:
+    please finish Youth Study season {} episode {} when available in this week!
+    Good good study, day day up!
+    (This is an automatic reply, indicating that you still did not finish youth study at the last update.)
+    '''.format(name, season, episode)
+    send(title, content, email_address)
+
 # test()

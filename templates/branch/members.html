@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="title">
+    Youth Study Status
+    </h1>
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>Youth Study Status of League Branch Members</thead>
+        <tbody>
+        <tr>
+            {% for col in ['real_name', 'finished'] %}
+                <th>{{col}}</th>
+            {% endfor %}
+        </tr>
+        {% for user in users %}
+            <tr>
+                <td><a href="#">{{ user.real_name }}</a></td>
+                <td>{{ user.finished }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="columns">
+        <div class="column">
+            <a href="{{ url_for('branch.update') }}" class="button is-rounded is-info is-large column">Update</a>
+        </div>
+        <div class="column">
+            <a href="{{ url_for('branch.notify') }}" class="button is-rounded is-info is-large column">Notify</a>
+        </div>
+    </div>
+{% endblock %}

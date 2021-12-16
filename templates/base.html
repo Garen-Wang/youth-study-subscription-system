@@ -18,23 +18,25 @@
                 <div class="container">
                     <div id="navbarMenuHeroA" class="navbar-menu">
                         <div class="navbar-end">
-                            <a href="{{ url_for('main.index') }}" class="navbar-item">
-                                Home
-                            </a>
-                            {% if not session['user_id'] %}
-                                <a href="{{ url_for('auth.login') }}" class="navbar-item">
-                                    Login
-                                </a>
-                                <a href="{{ url_for('auth.register') }}" class="navbar-item">
-                                    Register
-                                </a>
+                            <a href="{{ url_for('main.index') }}" class="navbar-item">Home</a>
+                            {% if session['user_id'] %}
+                                <a href="{{ url_for('user.subscriptions') }}" class="navbar-item">Subscriptions</a>
+{#                                <a href="{{ url_for('main.profile') }}" class="navbar-item">Profile</a>#}
+                                <a href="{{ url_for('auth.logout') }}" class="navbar-item">Logout</a>
+                            {% elif session['branch_id'] %}
+                                <a href="{{ url_for('branch.members') }}" class="navbar-item">Members</a>
+{#                                <a href="{{ url_for('branch.statistics') }}" class="navbar-item">Statistics</a>#}
+                                <a href="{{ url_for('branch.subscriptions') }}" class="navbar-item">Subscriptions</a>
+                                <a href="{{ url_for('auth.logout') }}" class="navbar-item">Logout</a>
+                            {% elif session['admin_id'] %}
+                                <a href="{{ url_for('admin.members') }}" class="navbar-item">Members</a>
+                                <a href="{{ url_for('auth.branch_register') }}" class="navbar-item">Register</a>
+{#                                <a href="{{ url_for('admin.statistics') }}" class="navbar-item">Statistics</a>#}
+                                <a href="{{ url_for('admin.subscriptions') }}" class="navbar-item">Subscriptions</a>
+                                <a href="{{ url_for('auth.logout') }}" class="navbar-item">Logout</a>
                             {% else %}
-                                <a href="{{ url_for('main.profile') }}" class="navbar-item">
-                                    Profile
-                                </a>
-                                <a href="{{ url_for('auth.logout') }}" class="navbar-item">
-                                    Logout
-                                </a>
+                                <a href="{{ url_for('auth.login') }}" class="navbar-item">Login</a>
+                                <a href="{{ url_for('auth.register') }}" class="navbar-item">Register</a>
                             {% endif %}
                         </div>
                     </div>

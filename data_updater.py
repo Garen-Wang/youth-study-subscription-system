@@ -1,36 +1,28 @@
 import os
-from flask import current_app
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 import selenium.common.exceptions
 import time
 import datetime
 
-
-root_path = current_app.root_path
-
-with open(os.path.join(root_path, 'secret', 'login_link')) as f:
-    _login_link = f.read()
-with open(os.path.join(root_path, 'secret', 'data_link')) as f:
-    _data_link = f.read()
+from config import data_link, login_link
 
 
-def get_member_list():
+def get_member_list(path):
     import pandas as pd
-    df = pd.read_excel(os.path.join(root_path, 'secret', 'secret/youth_league_member_list.xls'))
+    df = pd.read_excel(path)
     return set(df['团员列表'][2:])
 
 
 class DataUpdater:
-    _studied_name_list = set()
-    _unstudied_name_list = get_member_list()
-
     _chrome_options = Options()
     _chrome_options.add_argument('--headless')
     _chrome_options.add_argument('--disable-gpu')
     _browser = selenium.webdriver.Chrome(options=_chrome_options)
 
     def solve(self):
-        items = self._browser.find_elements_by_xpath('//table[@class="el-table__body"]/tbody/tr')
+        items = self._browser.find_elements(By.XPATH, '//table[@class="el-table__body"]/tbody/tr')
+        # items = self._browser.find_elements_by_xpath('//table[@class="el-table__body"]/tbody/tr')
         names = [item.text.split('\n')[0] for item in items]
         for name in names:
             self._studied_name_list.add(str(name))
@@ -41,9 +33,12 @@ class DataUpdater:
         print(self._unstudied_name_list)
         print(datetime.date.today())
 
-    def __init__(self, login_link=_login_link, data_link=_data_link):
+    def __init__(self, login_link=login_link, data_link=data_link):
+        self.member_list = get_member_list('secret/youth_league_member_list.xls')
         self.login_link = login_link
         self.data_link = data_link
+        self._studied_name_list = set()
+        self._unstudied_name_list = self.member_list
 
     def _login(self):
         self._browser.get(self.login_link)
@@ -58,9 +53,10 @@ class DataUpdater:
         time.sleep(5)
 
         try:
-            latest_link = self._browser.find_element_by_xpath(
-                '//table[@class="el-table__body"]/tbody/tr/td[5]/div/div'
-            )
+            # latest_link = self._browser.find_element_by_xpath(
+            #     '//table[@class="el-table__body"]/tbody/tr/td[5]/div/div'
+            # )
+            latest_link = self._browser.find_element(By.XPATH, '//table[@class="el-table__body"]/tbody/tr/td[5]/div/div')
             latest_link.click()
             time.sleep(5)
         except selenium.common.exceptions.NoSuchElementException:
@@ -68,9 +64,9 @@ class DataUpdater:
             return False
 
         try:
-            # btn_next = browser.find_element_by_xpath('//button[@class="btn-next"]')
-            btn_next = self._browser.find_element_by_xpath(
-                '//div[@class="pagination-container"]/div/button[@class="btn-next"]')
+            # btn_next = self._browser.find_element_by_xpath(
+            #     '//div[@class="pagination-container"]/div/button[@class="btn-next"]')
+            btn_next = self._browser.find_element(By.XPATH, '//div[@class="pagination-container"]/div/button[@class="btn-next"]')
             while btn_next.get_attribute('disabled') is None:
                 self.solve()
                 btn_next.click()
@@ -88,11 +84,26 @@ class DataUpdater:
     def quit(self):
         self._browser.quit()
 
+    @property
+    def unstudied_name_list(self):
+        return self._unstudied_name_list
+
+    @property
+    def studied_name_list(self):
+        return self._studied_name_list
+
 
 def test():
-    data_updater = DataUpdater(_login_link, _data_link)
+    data_updater = DataUpdater(login_link, data_link, get_member_list())
     data_updater.run()
     data_updater.quit()
+
+
+def update_studied_list():
+    data_updater = DataUpdater(login_link, data_link)
+    data_updater.run()
+    data_updater.quit()
+    return data_updater.studied_name_list
 
 
 # test()

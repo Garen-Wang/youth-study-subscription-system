@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="column is-4 is-offset-4">
+        <h1 class="title">Subscribe</h1>
+        <div class="box">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="notification is-danger">
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="post">
+                <div class="field">
+                    {% for subscription in subscriptions %}
+                        {% if user and subscription.enabled and user not in subscription.users %}
+                            <div class="control">
+                                <input type="checkbox" id="subscription{{ subscription.id }}" name="subscription{{ subscription.id }}">
+                                <label for="subscription{{ subscription.id }}">{{ 'subscription%d -- %d. %02d:%02d' % (subscription.id, subscription.day_of_week, subscription.hour, subscription.minute) }}</label>
+                            </div>
+                        {% endif %}
+                        {% if branch and subscription.enabled and branch not in subscription.branches %}
+                            <div class="control">
+                                <input type="checkbox" id="subscription{{ subscription.id }}" name="subscription{{ subscription.id }}">
+                                <label for="subscription{{ subscription.id }}">{{ 'subscription%d -- %d. %02d:%02d' % (subscription.id, subscription.day_of_week, subscription.hour, subscription.minute) }}</label>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <input class="button is-block is-large is-info is-fullwidth" type="submit" value="submit">
+            </form>
+
+        </div>
+    </div>
+{% endblock %}

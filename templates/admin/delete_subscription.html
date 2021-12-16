@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="column is-4 is-offset-4">
+    <h1 class="title">Delete Subscription</h1>
+    <div class="box">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+        <form method="post" action="{{ url_for('admin.delete_subscription') }}">
+            <div class="field">
+                {% for subscription in subscriptions %}
+                    <div class="control">
+                        <input type="checkbox" onclick="uniqueSelection(this)" id="subscription{{ subscription.id }}" name="subscription{{ subscription.id }}">
+                        <label for="subscription{{ subscription.id }}">{{ 'subscription%d -- %d. %02d:%02d' % (subscription.id, subscription.day_of_week, subscription.hour, subscription.minute) }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+            <input class="button is-info is-block is-large is-fullwidth" type="submit" value="submit">
+        </form>
+    </div>
+    </div>
+
+    <script>
+        function uniqueSelection(checkbox) {
+            let checkboxes = document.getElementsByName('subscription')
+            checkboxes.forEach((item) => {
+                if (item !== checkbox) {
+                    item.checked = false
+                }
+            })
+        }
+    </script>
+{% endblock %}

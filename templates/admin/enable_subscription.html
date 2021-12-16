@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="column is-4 is-offset-4">
+        <h1 class="title">Enable Subscription</h1>
+        <div class="box">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="notification is-danger">
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <form method="post" action="{{ url_for('admin.enable_subscription') }}">
+                <div class="field">
+                    {% for subscription in subscriptions %}
+                        {% if not subscription.enabled %}
+                            <div class="control">
+                                <input type="checkbox" id="subscription{{ subscription.id }}" name="subscription{{ subscription.id }}">
+                                <label for="subscription{{ subscription.id }}">{{ 'subscription%d -- %d. %02d:%02d' % (subscription.id, subscription.day_of_week, subscription.hour, subscription.minute) }}</label>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <input class="button is-info is-fullwidth is-block" type="submit" value="submit">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
