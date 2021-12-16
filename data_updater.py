@@ -1,15 +1,14 @@
-import os
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 import selenium.common.exceptions
 import time
 import datetime
+import pandas as pd
 
 from config import data_link, login_link
 
 
 def get_member_list(path):
-    import pandas as pd
     df = pd.read_excel(path)
     return set(df['团员列表'][2:])
 
@@ -94,7 +93,7 @@ class DataUpdater:
 
 
 def test():
-    data_updater = DataUpdater(login_link, data_link, get_member_list())
+    data_updater = DataUpdater(login_link, data_link)
     data_updater.run()
     data_updater.quit()
 

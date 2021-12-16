@@ -1,8 +1,8 @@
 import atexit
 import datetime
 
-from flask import Flask, logging
 from apscheduler.schedulers.background import BackgroundScheduler
+from flask import Flask, logging
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
