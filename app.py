@@ -2,7 +2,7 @@ import atexit
 import json
 import datetime
 
-from flask import Flask, session, Response, g
+from flask import Flask, logging
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_apscheduler import APScheduler
 from flask_sqlalchemy import SQLAlchemy
@@ -124,6 +124,8 @@ db = SQLAlchemy(app, session_options={
 scheduler = BackgroundScheduler(daemon=True)
 scheduler.start()
 
+logger = logging.create_logger(app)
+
 from auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
 
@@ -138,13 +140,6 @@ app.register_blueprint(branch_blueprint)
 
 from admin import admin as admin_blueprint
 app.register_blueprint(admin_blueprint)
-
-
-@app.route('/session')
-def check_session():
-    session_name = session['branch_id']
-    print('session_name = {}'.format(session_name))
-    return Response(json.dumps(session_name, ensure_ascii=False), mimetype='application/json')
 
 
 @app.route('/hello')

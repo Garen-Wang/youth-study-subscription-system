@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="column is-5 is-offset-4">
-        <h3 class="title">Branch Register</h3>
+        <h3 class="title">团支部注册</h3>
         <div class="box">
 
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <div class="notification is-danger">
-                        {{ messages[0] }}. Go to <a href="{{ url_for('auth.branch_login') }}">login page</a>.
+                        {{ messages[0] }}
                     </div>
                 {% endif %}
             {% endwith %}
@@ -15,42 +15,42 @@
             <form method="POST" action="{{ url_for('auth.branch_register') }}">
                 <div class="field">
                     <div class="control">
-                        <input class="input is-large" type="email" name="email" placeholder="Email" autofocus="" value="{{ request.form['email'] }}" required>
+                        <input class="input is-large" type="email" name="email" placeholder="电子邮箱" autofocus="" value="{{ request.form['email'] }}" required>
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="control">
-                        <input class="input is-large" type="number" name="phone" placeholder="Phone Number" value="{{ request.form['phone'] }}" autofocus="">
+                        <input class="input is-large" type="number" name="phone" placeholder="电话号码" value="{{ request.form['phone'] }}" autofocus="">
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="control">
-                        <input class="input is-large" type="text" name="real_name" placeholder="Real Name" value="{{ request.form['real_name'] }}" autofocus="">
+                        <input class="input is-large" type="text" name="real_name" placeholder="真实姓名" value="{{ request.form['real_name'] }}" autofocus="">
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="control">
-                        <input class="input is-large" type="password" name="password" value="{{ request.form['password'] }}" placeholder="Password">
+                        <input class="input is-large" type="password" name="password" value="{{ request.form['password'] }}" placeholder="密码">
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="control">
-                        <input class="input is-large" type="password" name="confirm_password" value="{{ request.form['confirm_password'] }}" placeholder="Confirm Your Password">
+                        <input class="input is-large" type="password" name="confirm_password" value="{{ request.form['confirm_password'] }}" placeholder="确认密码">
                     </div>
                 </div>
 
                 <div class="field is-grouped">
                     <div class="control is-expanded">
-                        <input class="input is-large is-info" type="number" name="ver_code" placeholder="Your Verification Code">
+                        <input class="input is-large is-info" type="number" name="ver_code" placeholder="验证码">
                     </div>
-                    <input class="button is-info is-large" type="submit" name="action" value="Send">
+                    <input class="button is-info is-large" type="submit" name="action" value="发送">
                 </div>
 
-                <input class="button is-block is-info is-large is-fullwidth" type="submit" name="action" value="Register" />
+                <input class="button is-block is-info is-large is-fullwidth" type="submit" name="action" value="提交" />
             </form>
         </div>
     </div>

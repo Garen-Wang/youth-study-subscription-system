@@ -34,8 +34,8 @@ def branch_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if 'branch_id' not in session.keys() or session['branch_id'] is None or 'role_id' not in session.keys() or session['role_id'] != 2:
-            return render_template('error.html', error='Branch required',
-                                   info='You do not have the right as branch manager'), 404
+            return render_template('error.html', error='没有权限操作',
+                                   info='当前账号没有团支部权限'), 404
         return view(**kwargs)
     return wrapped_view
 
@@ -44,8 +44,8 @@ def admin_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if 'admin_id' not in session.keys() or session['admin_id'] is None or 'role_id' not in session.keys() or session['role_id'] != 3:
-            return render_template('error.html', error='Admin required',
-                                   info='You do not have the right as administrator'), 404
+            return render_template('error.html', error='没有权限操作',
+                                   info='当前账号没有系统管理员权限'), 404
         return view(**kwargs)
     return wrapped_view
 
@@ -177,6 +177,7 @@ def login():
 
 
 @auth.route('/admin/register', methods=['GET', 'POST'])
+@not_logged_in_required
 def admin_register():
     if request.method == 'GET':
         if not admin_registration_closed:
@@ -185,13 +186,16 @@ def admin_register():
             return render_template('error.html', error='Registration Closed',
                                    info='Registration has been closed temporarily by system admin'), 404
     else:
-        if request.form.get('action') == 'Send':
+        if admin_registration_closed:
+            return render_template('error.html', error='Registration Closed',
+                                   info='Registration has been closed temporarily by system admin'), 404
+        if request.form.get('action') == '发送':
             email_address = request.form.get('email')
             if not email_address or len(email_address) == 0:
                 return redirect(url_for('auth.admin_register'))
             mail.send_verification_code(email_address)
             return render_template('auth/admin_register.html')
-        elif request.form.get('action') == 'Register':
+        elif request.form.get('action') == '注册':
             email_address = request.form.get('email')
             phone_number = request.form.get('phone')
             real_name = request.form.get('real_name')
@@ -253,13 +257,16 @@ def branch_register():
             return render_template('error.html', error='Registration Closed',
                                    info='Registration has been closed temporarily by system admin')
     else:
-        if request.form.get('action') == 'Send':
+        if branch_registration_closed:
+            return render_template('error.html', error='Registration Closed',
+                                   info='Registration has been closed temporarily by system admin')
+        if request.form.get('action') == '发送':
             email_address = request.form.get('email')
             if not email_address or len(email_address) == 0:
                 return redirect(url_for('auth.branch_register'))
             mail.send_verification_code(email_address)
             return render_template('auth/branch_register.html')
-        elif request.form.get('action') == 'Register':
+        elif request.form.get('action') == '注册':
             email_address = request.form.get('email')
             phone_number = request.form.get('phone')
             real_name = request.form.get('real_name')
@@ -318,16 +325,20 @@ def register():
         if not user_registration_closed:
             return render_template('register.html')
         else:
-            return render_template('error.html', error='Registration Closed',
-                                   info='Registration has been closed temporarily by system admin.')
+            return render_template('error.html', error='注册渠道关闭',
+                                   info='注册渠道已被系统管理员关闭')
     else:
-        if request.form.get('action') == 'Send':
+        if user_registration_closed:
+            return render_template('error.html', error='注册渠道关闭',
+                                   info='注册渠道已被系统管理员关闭')
+
+        if request.form.get('action') == '发送':
             email_address = request.form.get('email')
             if not email_address or len(email_address) == 0:
                 return redirect(url_for('auth.register'))
             mail.send_verification_code(email_address)
             return render_template('register.html')
-        elif request.form.get('action') == 'Register':
+        elif request.form.get('action') == '注册':
             email_address = request.form.get('email')
             phone_number = request.form.get('phone')
             branch_id = request.form.get('branch_id')

@@ -1,9 +1,10 @@
 from apscheduler.jobstores.base import JobLookupError
-from flask import Blueprint, render_template, current_app, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session, g
 
 import mail
+import models
 from auth import admin_required
-from models import YouthLeagueBranch, Subscription, User, SystemAdmin, day_of_week_dict
+from models import YouthLeagueBranch, Subscription, SystemAdmin, day_of_week_dict
 from app import db, scheduler
 from branch import _update, _notify
 import exceptions
@@ -14,9 +15,6 @@ admin = Blueprint('admin', __name__)
 @admin.route('/admin/members')
 @admin_required
 def members():
-    branches = get_branches()
-    for branch in branches:
-        print(branch.users)
     return render_template('admin/members.html', branches=get_branches())
 
 
@@ -41,6 +39,7 @@ def notify():
 @admin.route('/admin/subscriptions')
 @admin_required
 def subscriptions():
+    g.day_of_week_dict = models.display_day_of_week_dict
     return render_template('subscriptions.html', subscriptions=get_subscriptions())
 
 
@@ -54,7 +53,7 @@ def add_subscription():
         day_of_week = request.form['weekday']
         tim = request.form['time']
         hour, minute = tim.split(':')
-        print(subscription_name, day_of_week, hour, minute)
+        # print(subscription_name, day_of_week, hour, minute)
         create_subscription(subscription_name, day_of_week[:3].lower(), hour, minute)
         return redirect(url_for('admin.subscriptions'))
 
@@ -62,6 +61,7 @@ def add_subscription():
 @admin.route('/admin/subscriptions/delete', methods=['GET', 'POST'])
 @admin_required
 def delete_subscription():
+    g.day_of_week_dict = models.display_day_of_week_dict
     if request.method == 'GET':
         return render_template('admin/delete_subscription.html', subscriptions=get_subscriptions())
     else:
@@ -74,6 +74,7 @@ def delete_subscription():
 @admin.route('/admin/subscriptions/enable', methods=['GET', 'POST'])
 @admin_required
 def enable_subscription():
+    g.day_of_week_dict = models.display_day_of_week_dict
     if request.method == 'GET':
         return render_template('admin/enable_subscription.html', subscriptions=get_subscriptions())
     else:
@@ -86,6 +87,7 @@ def enable_subscription():
 @admin.route('/admin/subscriptions/disable', methods=['GET', 'POST'])
 @admin_required
 def disable_subscription():
+    g.day_of_week_dict = models.display_day_of_week_dict
     if request.method == 'GET':
         return render_template('admin/disable_subscription.html', subscriptions=get_subscriptions())
     else:
@@ -102,7 +104,7 @@ def create_subscription(subscription_name, day_of_week: str, hour: int, minute: 
                                 enabled=False)
     db.session.add(subscription)
     db.session.commit()
-    print('subscription added')
+    # print('subscription added')
     return subscription.id
 
 
@@ -115,13 +117,13 @@ def _delete_subscription(subscription_id):
 
 # may throw exception
 def _enable_subscription(subscription_id):
-    print(subscription_id)
+    # print(subscription_id)
     subscription = Subscription.query.filter_by(id=subscription_id).first()
     if subscription is None:
         raise exceptions.SubscriptionNotFoundException()
     if subscription.enabled:
         return
-    print('day_of_week={}, hour={}, minute={}'.format(subscription.day_of_week, subscription.hour, subscription.minute))
+    # print('day_of_week={}, hour={}, minute={}'.format(subscription.day_of_week, subscription.hour, subscription.minute))
     # updating_user_ids = [user.id for user in subscription.users if not user.studied]
     scheduler.add_job(func=execute_schedule, args=(subscription.id,), trigger='cron',
                       # week='*', year='*',
@@ -129,7 +131,7 @@ def _enable_subscription(subscription_id):
                       hour=subscription.hour, minute=subscription.minute,
                       id=subscription_id
                       )
-    print('added')
+    # print('added')
     subscription.enabled = True
     db.session.commit()
 

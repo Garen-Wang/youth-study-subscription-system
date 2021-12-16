@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="column is-4 is-offset-4">
-    <h1 class="title">Delete Subscription</h1>
+    <h1 class="title">删除订阅</h1>
     <div class="box">
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -17,11 +17,11 @@
                 {% for subscription in subscriptions %}
                     <div class="control">
                         <input type="checkbox" onclick="uniqueSelection(this)" id="subscription{{ subscription.id }}" name="subscription{{ subscription.id }}">
-                        <label for="subscription{{ subscription.id }}">{{ 'subscription%d -- %d. %02d:%02d' % (subscription.id, subscription.day_of_week, subscription.hour, subscription.minute) }}</label>
+                        <label for="subscription{{ subscription.id }}">{{ '%s，在%s的%02d:%02d触发' % (subscription.name, g.day_of_week_dict[subscription.day_of_week], subscription.hour, subscription.minute) }}</label>
                     </div>
                 {% endfor %}
             </div>
-            <input class="button is-info is-block is-large is-fullwidth" type="submit" value="submit">
+            <input class="button is-info is-block is-large is-fullwidth" type="submit" value="提交">
         </form>
     </div>
     </div>

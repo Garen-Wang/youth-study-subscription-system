@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, g
-
+import models
 from app import db
 from auth import user_required
 from models import Subscription, User, YouthLeagueBranch, day_of_week_dict
@@ -34,7 +34,7 @@ def update():
 @user.route('/user/subscriptions')
 @user_required
 def subscriptions():
-    g.day_of_week_dict = day_of_week_dict
+    g.day_of_week_dict = models.display_day_of_week_dict
     return render_template('subscriptions.html', subscriptions=get_subscriptions())
 
 
@@ -73,7 +73,7 @@ def _subscribe(user_id, subscription_id):
     user = User.query.filter_by(id=user_id).first()
     subscription.users.append(user)
     db.session.commit()
-    print('subscribed')
+    # print('subscribed')
 
 
 def _unsubscribe(user_id, subscription_id):
@@ -81,5 +81,5 @@ def _unsubscribe(user_id, subscription_id):
     user = User.query.filter_by(id=user_id).first()
     subscription.users.remove(user)
     db.session.commit()
-    print('unsubscribed')
+    # print('unsubscribed')
 

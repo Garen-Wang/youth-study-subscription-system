@@ -26,13 +26,13 @@ def load_branch():
 @branch.route('/branch/members')
 @branch_required
 def members():
-    branch = YouthLeagueBranch.query.filter_by(id=session['branch_id']).first()
+    g.finished_dict = {True: '是', False: '否'}
     # df = pd.DataFrame(columns=['id', 'real_name', 'finished'])
     assert branch
     # for user in branch.users:
     #     print(user)
         # df = df.append({'id': user.id, 'real_name': user.real_name, 'finished': user.finished}, ignore_index=True)
-    return render_template('branch/members.html', users=branch.users)
+    return render_template('branch/members.html')
 
 
 # update youth study status
@@ -162,7 +162,7 @@ def _subscribe(branch_id, subscription_id):
     branch = YouthLeagueBranch.query.filter_by(id=branch_id).first()
     subscription.branches.append(branch)
     db.session.commit()
-    print('subscribed')
+    # print('subscribed')
 
 
 def _unsubscribe(branch_id, subscription_id):
@@ -170,7 +170,7 @@ def _unsubscribe(branch_id, subscription_id):
     branch = YouthLeagueBranch.query.filter_by(id=branch_id).first()
     subscription.branches.remove(branch)
     db.session.commit()
-    print('unsubscribed')
+    # print('unsubscribed')
 
 
 def get_subscriptions():

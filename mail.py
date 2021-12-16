@@ -32,7 +32,7 @@ class MailWorker:
             smtp_object.login(self.user, self.ver)
             smtp_object.sendmail(self.sender, self.receiver, self.message.as_string())
             smtp_object.quit()
-            print('sent')
+            # print('sent')
         except smtplib.SMTPException as e:
             raise e
 
@@ -52,9 +52,8 @@ def send(title, content, receiver):
 def send_verification_code(email_address):
     title = 'Youth Study Subscription System Verification Code'
     content = ver.generate(email_address)
-    # TODO: testing here, remember to uncomment
-    # send(title, content, email_address)
-    print(content)
+    send(title, content, email_address)
+    # print(content)
 
 
 def send_reminder(email_address, name, season, episode):
@@ -64,7 +63,6 @@ def send_reminder(email_address, name, season, episode):
     Good good study, day day up!
     (This is an automatic reply, indicating that you still did not finish youth study at the last update.)
     '''.format(name, season, episode)
-    # TODO: testing here, remember to uncomment
-    # send(title, content, email_address)
+    send(title, content, email_address)
 
 # test()

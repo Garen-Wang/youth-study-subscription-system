@@ -2,16 +2,16 @@
 
 {% block content %}
     <div class="column is-fullscreen">
-        <h1 class="title">Subscriptions</h1>
+        <h1 class="title">订阅管理</h1>
         <div class="box">
             <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead></thead>
                 <tbody>
                 <tr>
-                    <th>Name</th>
-                    <th>ID</th>
-                    <th>Day of Week</th>
-                    <th>Time</th>
+                    <th>订阅名称</th>
+                    <th>订阅ID</th>
+                    <th>触发日期</th>
+                    <th>触发时间</th>
                 </tr>
                 {% for subscription in subscriptions %}
                     {% if g.user in subscription.users or g.branch in subscription.branches %}
@@ -32,30 +32,30 @@
             <div class="columns">
                 {% if session['user_id'] %}
                     <div class="column">
-                        <a class="button is-rounded is-info is-large column" href="{{ url_for('user.subscribe') }}">Subscribe</a>
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('user.subscribe') }}">订阅</a>
                     </div>
                     <div class="column">
-                        <a class="button is-rounded is-info is-large column" href="{{ url_for('user.unsubscribe') }}">Unsubscribe</a>
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('user.unsubscribe') }}">取消订阅</a>
                     </div>
                 {% elif session['branch_id'] %}
                     <div class="column">
-                        <a class="button is-rounded is-info is-large column" href="{{ url_for('branch.subscribe') }}">Subscribe</a>
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('branch.subscribe') }}">订阅</a>
                     </div>
                     <div class="column">
-                        <a class="button is-rounded is-info is-large column" href="{{ url_for('branch.unsubscribe') }}">Unsubscribe</a>
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('branch.unsubscribe') }}">取消订阅</a>
                     </div>
                 {% elif session['admin_id'] %}
                     <div class="column">
-                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.add_subscription') }}">Add Subscription</a>
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.add_subscription') }}">添加订阅</a>
                     </div>
                     <div class="column">
-                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.delete_subscription') }}">Delete Subscription</a>
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.delete_subscription') }}">删除订阅</a>
                     </div>
                     <div class="column">
-                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.enable_subscription') }}">Enable Subscription</a>
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.enable_subscription') }}">启用订阅</a>
                     </div>
                     <div class="column">
-                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.disable_subscription') }}">Disable Subscription</a>
+                        <a class="button is-rounded is-info is-large column" href="{{ url_for('admin.disable_subscription') }}">关闭订阅</a>
                     </div>
                 {% endif %}
             </div>

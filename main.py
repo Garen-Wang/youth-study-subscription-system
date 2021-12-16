@@ -1,8 +1,14 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template, session, g
 
 from models import User
 
 main = Blueprint('main', __name__)
+
+
+@main.before_request
+def load_dicts():
+    role_dict = {1: '用户', 2: '团支部', 3: '系统管理员'}
+    g.role_dict = role_dict
 
 
 @main.route('/')
@@ -13,7 +19,3 @@ def index():
             session['user_finished'] = True
     return render_template('index.html')
 
-
-@main.route('/profile')
-def profile():
-    return render_template('profile.html')

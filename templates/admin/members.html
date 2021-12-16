@@ -2,14 +2,14 @@
 
 {% block content %}
     <h1 class="title">
-    Youth Study Status
+    青年大学习参学数据
     </h1>
 
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-        <thead>Youth Study Status of League Branches</thead>
+        <thead>各团支部本周参学情况汇总表</thead>
         <tbody>
         <tr>
-            {% for col in ['branch name', 'total number', 'studied number', 'studied rate'] %}
+            {% for col in ['团支部名称', '团员人数', '已参学人数', '参学率'] %}
                 <th>{{ col }}</th>
             {% endfor %}
         </tr>
@@ -36,10 +36,10 @@
 
     <div class="columns">
         <div class="column">
-            <a href="{{ url_for('admin.update') }}" class="button is-rounded is-info is-large column">Update</a>
+            <a href="{{ url_for('admin.update') }}" class="button is-rounded is-info is-large column">更新数据</a>
         </div>
         <div class="column">
-            <a href="{{ url_for('admin.notify') }}" class="button is-rounded is-info is-large column">Notify</a>
+            <a href="{{ url_for('admin.notify') }}" class="button is-rounded is-info is-large column">一键提醒</a>
         </div>
     </div>
 

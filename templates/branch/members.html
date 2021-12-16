@@ -2,31 +2,56 @@
 
 {% block content %}
     <h1 class="title">
-    Youth Study Status
+    青年大学习参学数据
     </h1>
+    {% set dev = namespace(value=0) %}
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-        <thead>Youth Study Status of League Branch Members</thead>
+        <thead>本团支部本周参学具体情况记录表</thead>
         <tbody>
         <tr>
-            {% for col in ['real_name', 'finished'] %}
+            {% for col in ['姓名', '是否已参学'] %}
                 <th>{{col}}</th>
             {% endfor %}
         </tr>
-        {% for user in users %}
+        {% for user in g.branch.users %}
+            {% set dev.value = dev.value + 1 %}
             <tr>
                 <td><a href="#">{{ user.real_name }}</a></td>
-                <td>{{ user.finished }}</td>
+                <td>{{ g.finished_dict[user.finished] }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>本团支部本周参学情况汇总表</thead>
+        <tbody>
+        <tr>
+            {% for col in ['团支部名称', '团员人数', '已参学人数', '参学率'] %}
+                <th>{{ col }}</th>
+            {% endfor %}
+        </tr>
+            <tr>
+                <td><a href="#">{{ g.branch.real_name }}</a></td>
+                <td>{{ dev.value }}</td>
+                <td>{{ g.branch.num_finished }}</td>
+                <td>
+                    {% if dev.value != 0 %}
+                        {{ "{}%".format(g.branch.num_finished / dev.value * 100) }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
     <div class="columns">
         <div class="column">
-            <a href="{{ url_for('branch.update') }}" class="button is-rounded is-info is-large column">Update</a>
+            <a href="{{ url_for('branch.update') }}" class="button is-rounded is-info is-large column">更新数据</a>
         </div>
         <div class="column">
-            <a href="{{ url_for('branch.notify') }}" class="button is-rounded is-info is-large column">Notify</a>
+            <a href="{{ url_for('branch.notify') }}" class="button is-rounded is-info is-large column">一键提醒</a>
         </div>
     </div>
 {% endblock %}
