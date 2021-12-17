@@ -1,4 +1,5 @@
 config.py
+db.sqlite
 venv
 secret
-db.sqlite
+__pycache__
