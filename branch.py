@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash
 import mail
 from app import db
 import data_updater
-from models import YouthLeagueBranch, User, YouthStudyEpisode, Subscription, day_of_week_dict
+from models import YouthLeagueBranch, User, YouthStudyEpisode, Subscription, display_day_of_week_dict
 from auth import branch_required
 
 branch_bp = Blueprint('branch', __name__)
@@ -74,14 +74,14 @@ def _notify(branch_id):
 @branch_bp.route('/branch/subscriptions')
 @branch_required
 def subscriptions():
-    g.day_of_week_dict = day_of_week_dict
+    g.day_of_week_dict = display_day_of_week_dict
     return render_template('subscriptions.html', subscriptions=get_subscriptions(), branch=YouthLeagueBranch.query.filter_by(id=session['branch_id']).first())
 
 
 @branch_bp.route('/branch/subscribe', methods=['GET', 'POST'])
 @branch_required
 def subscribe():
-    g.day_of_week_dict = day_of_week_dict
+    g.day_of_week_dict = display_day_of_week_dict
     if request.method == 'GET':
         return render_template('subscribe.html', subscriptions=get_subscriptions())
     else:
@@ -94,7 +94,7 @@ def subscribe():
 @branch_bp.route('/branch/unsubscribe', methods=['GET', 'POST'])
 @branch_required
 def unsubscribe():
-    g.day_of_week_dict = day_of_week_dict
+    g.day_of_week_dict = display_day_of_week_dict
     if request.method == 'GET':
         return render_template('unsubscribe.html', subscriptions=get_subscriptions())
     else:

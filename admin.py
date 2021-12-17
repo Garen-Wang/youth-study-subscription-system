@@ -123,6 +123,7 @@ def _enable_subscription(subscription_id):
         raise exceptions.SubscriptionNotFoundException()
     if subscription.enabled:
         return
+    # print('subscription_id={}'.format(subscription_id))
     # print('day_of_week={}, hour={}, minute={}'.format(subscription.day_of_week, subscription.hour, subscription.minute))
     # updating_user_ids = [user.id for user in subscription.users if not user.studied]
     scheduler.add_job(func=execute_schedule, args=(subscription.id,), trigger='cron',

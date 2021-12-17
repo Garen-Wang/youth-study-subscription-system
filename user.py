@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 import models
 from app import db
 from auth import user_required
-from models import Subscription, User, YouthLeagueBranch, day_of_week_dict
+from models import Subscription, User, YouthLeagueBranch, display_day_of_week_dict
 
 user_bp = Blueprint('user', __name__)
 
@@ -41,7 +41,7 @@ def subscriptions():
 @user_bp.route('/user/subscribe', methods=['GET', 'POST'])
 @user_required
 def subscribe():
-    g.day_of_week_dict = day_of_week_dict
+    g.day_of_week_dict = display_day_of_week_dict
     if request.method == 'GET':
         return render_template('subscribe.html', subscriptions=get_subscriptions())
     else:
@@ -54,7 +54,7 @@ def subscribe():
 @user_bp.route('/user/unsubscribe', methods=['GET', 'POST'])
 @user_required
 def unsubscribe():
-    g.day_of_week_dict = day_of_week_dict
+    g.day_of_week_dict = display_day_of_week_dict
     if request.method == 'GET':
         return render_template('unsubscribe.html', subscriptions=get_subscriptions())
     else:
@@ -69,17 +69,19 @@ def get_subscriptions():
 
 
 def _subscribe(user_id, subscription_id):
+    print(subscription_id)
     subscription = Subscription.query.filter_by(id=subscription_id).first()
     user = User.query.filter_by(id=user_id).first()
     subscription.users.append(user)
     db.session.commit()
-    # print('subscribed')
+    print('subscribed')
 
 
 def _unsubscribe(user_id, subscription_id):
+    print(subscription_id)
     subscription = Subscription.query.filter_by(id=subscription_id).first()
     user = User.query.filter_by(id=user_id).first()
     subscription.users.remove(user)
     db.session.commit()
-    # print('unsubscribed')
+    print('unsubscribed')
 
