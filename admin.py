@@ -176,12 +176,23 @@ def execute_schedule(subscription_id):
     for branch_id in branches:
         branch = YouthLeagueBranch.query.filter_by(id=branch_id).first()
         studied_list, unstudied_list = branch.update()
+
         cnt = 0
         for user in branch.users:
-            if user in updating_users and user.real_name in studied_list:
-                if not user.finished:
-                    user.finished = True
-                    cnt += 1
+            print(user)
+            if branch in updating_branches:
+                print(branch)
+                if user.real_name in studied_list:
+                    print(user.finished)
+                    if not user.finished:
+                        user.finished = True
+                        cnt += 1
+                else:
+                    mail.send_reminder(user.email_address, user.nickname, 12, 11)
+            elif user in updating_users:
+                if user.real_name in studied_list:
+                    if not user.finished:
+                        user.finished = True
                 else:
                     mail.send_reminder(user.email_address, user.nickname, 12, 11)
         if branch in updating_branches:

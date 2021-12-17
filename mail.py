@@ -1,7 +1,6 @@
 import smtplib
 from email.mime.text import MIMEText
 
-import util
 import ver
 
 from config import _mail_host, _mail_user, _mail_pass
@@ -59,11 +58,7 @@ def send_verification_code(email_address):
 
 def send_reminder(email_address, name, season, episode):
     title = "别忘了青年大学习哟！"
-    content = '''亲爱的{}:
-    请你在有空的时候，及时在本周之内完成青年大学习第{}季第{}期！
-    好好学习，天天向上！
-    （这是一封自动发送的邮件，表明你正在被系统管理员或团支部或自设订阅提醒，只需参学，不需回复）
-    '''.format(name, util.convert(season), util.convert(episode))
+    content = '亲爱的{}:\n请你在有空的时候，及时在本周之内完成青年大学习第{}季第{}期！\n好好学习，天天向上！\n（这是一封自动发送的邮件，表明你正在被系统管理员或团支部或自设订阅提醒，只需参学，不需回复）'.format(name, season, episode)
     send(title, content, email_address)
 
 # test()
